@@ -1,16 +1,7 @@
--- Make sure the table exists; if not, import it first
--- Assuming metal_bands table has columns: band_name, main_style, formed, split
+-- Lists all bands with Glam rock as their main style
+-- ranked by their longevity, Column names: band_name and lifespan (in years)
+-- Use attributes formed and split for computing lifespan
+-- Script should execute on any database
 
--- Query to list Glam rock bands ranked by their lifespan
-SELECT 
-    band_name, 
-    CASE 
-        WHEN split IS NULL THEN 2022 - formed  -- If split is NULL, the band is still active
-        ELSE split - formed                     -- Calculate lifespan as difference between split and formed years
-    END AS lifespan
-FROM 
-    metal_bands
-WHERE 
-    main_style = 'Glam rock'                   -- Filter for Glam rock bands
-ORDER BY 
-    lifespan DESC;                            -- Order by lifespan in descending order
+SELECT band_name, COALESCE(split, 2022) - formed as lifespan FROM metal_bands
+WHERE style LIKE '%Glam rock%' ORDER BY lifespan DESC;
